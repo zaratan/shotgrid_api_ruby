@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.2.0.8] - 2026-05-10
 
+### Added
+
+- Explicit dependency on `ostruct` (no longer in default gems on Ruby 4.0+)
+
 ### Changed
 
 - Bumped minimum Ruby to 3.3 and updated the CI matrix to non-EOL versions (3.3, 3.4, 4.0)
