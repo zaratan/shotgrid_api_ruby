@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    shotgrid_api_ruby (0.2.0.7)
+    shotgrid_api_ruby (0.2.0.8)
       activesupport (~> 7)
       faraday (~> 1)
       sorbet-runtime
@@ -294,7 +294,6 @@ PLATFORMS
   x86_64-linux
 
 DEPENDENCIES
-  bundler
   bundler-audit (> 0.6.0)
   dotenv
   faker
