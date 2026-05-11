@@ -14,14 +14,13 @@ module ShotgridApiRuby
       # Validate auth parameters format
       sig do
         params(
-            client_id: T.nilable(String),
-            client_secret: T.nilable(String),
-            username: T.nilable(String),
-            password: T.nilable(String),
-            session_token: T.nilable(String),
-            refresh_token: T.nilable(String),
-          )
-          .returns(T::Boolean)
+          client_id: T.nilable(String),
+          client_secret: T.nilable(String),
+          username: T.nilable(String),
+          password: T.nilable(String),
+          session_token: T.nilable(String),
+          refresh_token: T.nilable(String),
+        ).returns(T::Boolean)
       end
       def self.valid?(
         client_id: nil,

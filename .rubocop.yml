@@ -1,13 +1,57 @@
 inherit_from:
   - http://relaxed.ruby.style/rubocop.yml
 
-inherit_gem:
-  prettier: rubocop.yml
-
 plugins:
   - rubocop-faker
   - rubocop-performance
   - rubocop-sorbet
+
+# Layout and most Style cops are disabled because formatting is handled
+# outside of RuboCop (historically by Prettier + Syntax Tree). RuboCop is
+# kept for semantic/lint checks only.
+Layout:
+  Enabled: false
+
+# Layout/LineLength is re-enabled because some Style cops (e.g.
+# Style/IfUnlessModifier) rely on it to behave correctly.
+Layout/LineLength:
+  Enabled: true
+
+Style/MultilineIfModifier:
+  Enabled: false
+
+Style/EmptyMethod:
+  EnforcedStyle: expanded
+
+Style/Lambda:
+  Enabled: false
+
+Style/MultilineBlockChain:
+  Enabled: false
+
+Style/StringLiterals:
+  Enabled: false
+
+Style/StringLiteralsInInterpolation:
+  Enabled: false
+
+Style/QuotedSymbols:
+  Enabled: false
+
+Style/SymbolArray:
+  Enabled: false
+
+Style/WordArray:
+  Enabled: false
+
+Style/TrailingCommaInArguments:
+  Enabled: false
+
+Style/TrailingCommaInArrayLiteral:
+  Enabled: false
+
+Style/TrailingCommaInHashLiteral:
+  Enabled: false
 
 AllCops:
   NewCops: enable

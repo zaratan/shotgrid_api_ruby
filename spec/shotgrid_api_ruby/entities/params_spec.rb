@@ -589,8 +589,9 @@ describe ShotgridApiRuby::Entities::Params do
       describe 'complex filters' do
         context 'when the logical operator is specified' do
           it 'sets the filters and logical_operator' do
-            expect(params).to receive(:translate_complex_filters_to_sg)
-              .and_return(:complex_translate)
+            expect(params).to receive(
+              :translate_complex_filters_to_sg,
+            ).and_return(:complex_translate)
             params.add_filter({ a: { b: {} } }, 'or')
             expect(params[:filter][:conditions]).to eq(:complex_translate)
             expect(params[:filter][:logical_operator]).to eq('or')
@@ -598,8 +599,9 @@ describe ShotgridApiRuby::Entities::Params do
         end
 
         it 'sets the filters' do
-          expect(params).to receive(:translate_complex_filters_to_sg)
-            .and_return(:complex_translate)
+          expect(params).to receive(
+            :translate_complex_filters_to_sg,
+          ).and_return(:complex_translate)
           params.add_filter({ a: { b: {} } })
           expect(params[:filter][:conditions]).to eq(:complex_translate)
           expect(params[:filter][:logical_operator]).to eq('and')

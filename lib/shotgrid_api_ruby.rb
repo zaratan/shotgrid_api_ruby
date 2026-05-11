@@ -18,12 +18,11 @@ module ShotgridApiRuby
 
   sig do
     params(
-        auth: ShotgridApiRuby::Types::AuthType,
-        site_url: T.nilable(String),
-        shotgun_site: T.nilable(String),
-        shotgrid_site: T.nilable(String),
-      )
-      .returns(Client)
+      auth: ShotgridApiRuby::Types::AuthType,
+      site_url: T.nilable(String),
+      shotgun_site: T.nilable(String),
+      shotgrid_site: T.nilable(String),
+    ).returns(Client)
   end
   def self.new(auth:, site_url: nil, shotgun_site: nil, shotgrid_site: nil)
     Client.new(

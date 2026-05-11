@@ -3,17 +3,17 @@ describe ShotgridApiRuby::Entities::Summarize, :vcr do
   in_context 'with vcr values' do
     describe 'count' do
       it 'calls summarize' do
-        expect(shotgrid_client.assets.summary_client).to receive(:summarize)
-          .with(
-            filter: {
-              project: {
-                id: 122,
-              },
+        expect(shotgrid_client.assets.summary_client).to receive(
+          :summarize,
+        ).with(
+          filter: {
+            project: {
+              id: 122,
             },
-            logical_operator: 'and',
-            summary_fields: [{ type: :record_count, field: 'id' }],
-          )
-          .and_call_original
+          },
+          logical_operator: 'and',
+          summary_fields: [{ type: :record_count, field: 'id' }],
+        ).and_call_original
 
         shotgrid_client.assets.count(
           filter: {

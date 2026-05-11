@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    shotgrid_api_ruby (0.2.1.0)
+    shotgrid_api_ruby (0.2.1.1)
       dry-inflector (~> 1.0)
       faraday (~> 2.0)
       faraday-net_http (~> 3.0)
@@ -89,10 +89,6 @@ GEM
     parser (3.3.11.1)
       ast (~> 2.4.1)
       racc
-    prettier (4.0.4)
-      syntax_tree (>= 4.0.1)
-      syntax_tree-haml (>= 2.0.0)
-      syntax_tree-rbs (>= 0.2.0)
     prettier_print (1.2.1)
     prism (1.9.0)
     pry (0.16.0)
@@ -192,14 +188,6 @@ GEM
       thor (>= 0.19.2)
     syntax_tree (6.3.0)
       prettier_print (>= 1.2.0)
-    syntax_tree-haml (4.0.3)
-      haml (>= 5.2)
-      prettier_print (>= 1.2.1)
-      syntax_tree (>= 6.0.0)
-    syntax_tree-rbs (1.0.0)
-      prettier_print
-      rbs
-      syntax_tree (>= 2.0.1)
     tapioca (0.19.1)
       benchmark
       bundler (>= 2.2.25)
@@ -244,7 +232,6 @@ DEPENDENCIES
   guard-rspec
   haml
   overcommit
-  prettier
   pry-byebug
   rake
   rspec (~> 3.0)
@@ -257,6 +244,7 @@ DEPENDENCIES
   shotgrid_api_ruby!
   simplecov
   sorbet
+  syntax_tree
   tapioca
   timecop
   unparser

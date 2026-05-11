@@ -21,9 +21,10 @@ VCR.configure do |config|
   config.filter_sensitive_data('<SCRIPT_KEY>') do
     (
       ENV['VCR_SHOTGRID_SCRIPT_KEY'] &&
-        URI
-          .encode_www_form_component(ENV['VCR_SHOTGRID_SCRIPT_KEY'])
-          &.gsub(/\*/, '%2A')
+        URI.encode_www_form_component(ENV['VCR_SHOTGRID_SCRIPT_KEY'])&.gsub(
+          /\*/,
+          '%2A',
+        )
     ) || 'vcr_shotgrid_script_key'
   end
   config.filter_sensitive_data('<SHOTGUN_SCRIPT_NAME>') do
@@ -32,9 +33,10 @@ VCR.configure do |config|
   config.filter_sensitive_data('<SHOTGUN_SCRIPT_KEY>') do
     (
       ENV['VCR_SHOTGUN_SCRIPT_KEY'] &&
-        URI
-          .encode_www_form_component(ENV['VCR_SHOTGUN_SCRIPT_KEY'])
-          &.gsub(/\*/, '%2A')
+        URI.encode_www_form_component(ENV['VCR_SHOTGUN_SCRIPT_KEY'])&.gsub(
+          /\*/,
+          '%2A',
+        )
     ) || 'vcr_shotgun_script_key'
   end
   config.filter_sensitive_data('=<USERNAME>') do

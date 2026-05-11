@@ -117,10 +117,8 @@ describe ShotgridApiRuby::Entities, :vcr do
 
           it 'changes the entity' do
             expect { update }.to change {
-                shotgrid_client.assets.find(id).description
-              }
-              .from('old')
-              .to('new')
+              shotgrid_client.assets.find(id).description
+            }.from('old').to('new')
           end
 
           it 'returns the changed entity' do
@@ -165,10 +163,8 @@ describe ShotgridApiRuby::Entities, :vcr do
 
         it 'revive the entity' do
           expect { revive }.to change {
-              shotgrid_client.assets.first(filter: { id: id })&.description
-            }
-            .from(nil)
-            .to('old')
+            shotgrid_client.assets.first(filter: { id: id })&.description
+          }.from(nil).to('old')
         end
       end
     end
@@ -252,24 +248,24 @@ describe ShotgridApiRuby::Entities, :vcr do
         ShotgridApiRuby::Entity.new(
           type: 'type',
           attributes: OpenStruct.new,
-          links: {},
-          relationships: {},
+          links: {
+          },
+          relationships: {
+          },
           id: 42,
         )
       end
 
       it 'forward to all' do
-        expect(shotgrid_assets).to receive(:all)
-          .with(
-            fields: [:fields],
-            sort: :sort,
-            filter: [:filter],
-            retired: true,
-            include_archived_projects: false,
-            logical_operator: :logical_operator,
-            page_size: 1,
-          )
-          .and_return([fake_entity])
+        expect(shotgrid_assets).to receive(:all).with(
+          fields: [:fields],
+          sort: :sort,
+          filter: [:filter],
+          retired: true,
+          include_archived_projects: false,
+          logical_operator: :logical_operator,
+          page_size: 1,
+        ).and_return([fake_entity])
         expect(
           shotgrid_assets.first(
             fields: [:fields],
@@ -382,9 +378,9 @@ describe ShotgridApiRuby::Entities, :vcr do
             expect(shotgrid_assets).to receive(:search).and_call_original
             result = shotgrid_assets.all(filter: filter)
             expect(
-              result.map { |asset|
-                asset.relationships['project']['data']['id']
-              }.uniq,
+              result
+                .map { |asset| asset.relationships['project']['data']['id'] }
+                .uniq,
             ).to eq([122])
           end
         end
@@ -524,9 +520,9 @@ describe ShotgridApiRuby::Entities, :vcr do
           end
 
           it 'calls all instead' do
-            expect(shotgrid_assets).to receive(:all)
-              .at_least(:once)
-              .and_call_original
+            expect(shotgrid_assets).to receive(:all).at_least(
+              :once,
+            ).and_call_original
             result = shotgrid_assets.search(filter: filter)
             expect(result.first.code).to eq(filter[:code])
           end

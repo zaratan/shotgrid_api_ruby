@@ -7,6 +7,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.1.1] - 2026-05-11
+
+### Changed
+
+- Replaced the Prettier toolchain (`@prettier/plugin-ruby` + `prettier` npm packages, and the `prettier` Ruby gem) with `syntax_tree` invoked directly via `bundle exec stree`. Per the upstream `@prettier/plugin-ruby` maintainers, the plugin is no longer recommended in favor of using Syntax Tree directly.
+- CI now checks formatting via `bundle exec stree check ...` instead of `yarn prettier -c ...`. The `release` job's `needs:` was updated from `[tests, prettier]` to `[tests, format]`.
+- Overcommit `Prettier` hooks (pre-commit and pre-push) renamed to `SyntaxTree`; `bin/prettirun` renamed to `bin/streerun` and rewritten to call `bundle exec stree check`.
+- Inlined the Style/Layout cop disablement (previously inherited via `inherit_gem: prettier: rubocop.yml`) directly into `.rubocop.yml` — RuboCop still does not enforce style.
+
+### Added
+
+- `syntax_tree` dev dependency (it used to be transitive via the `prettier` gem)
+- `.streerc` configuring the `single_quotes` and `trailing_comma` plugins to preserve the existing code style
+
+### Removed
+
+- `package.json`, `yarn.lock`, `.prettierrc.js` — the gem no longer needs a JavaScript toolchain
+- `prettier` Ruby gem from `Gemfile` (and its transitive `syntax_tree-haml`, `syntax_tree-rbs`)
+
 ## [0.2.1.0] - 2026-05-11
 
 ### Changed

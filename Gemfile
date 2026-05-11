@@ -7,13 +7,13 @@ group :development do
   gem 'guard-rspec', require: false
   gem 'haml', require: false
   gem 'overcommit', require: false
-  gem 'prettier', require: false
   gem 'rubocop', '> 0.58', require: false
   gem 'rubocop-faker', require: false
   gem 'rubocop-performance', require: false
   gem 'rubocop-sorbet', require: false
   gem 'ruby-lsp', require: false
   gem 'sorbet', require: false
+  gem 'syntax_tree', require: false
   gem 'tapioca', require: false
   gem 'unparser', require: false
   gem 'yard', require: false

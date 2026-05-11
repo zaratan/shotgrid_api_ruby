@@ -25,20 +25,19 @@ jobs:
         run: bundle exec rspec
       - name: Run type checking (Sorbet)
         run: bundle exec srb tc
-  prettier:
+  format:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Set up Node
-        uses: actions/setup-node@v2
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
         with:
-          node-version: '14'
-      - name: Install yarn dep
-        run: yarn install
-      - name: Check prettier
-        run: yarn prettier -c './!(vendor|sorbet|node_modules)/**/*.rb' Guardfile Rakefile *.gemspec Gemfile
+          ruby-version: '3.4'
+          bundler-cache: true
+      - name: Check formatting (Syntax Tree)
+        run: bundle exec stree check './lib/**/*.rb' './spec/**/*.rb' Guardfile Rakefile './*.gemspec' Gemfile
   release:
-    needs: [tests, prettier]
+    needs: [tests, format]
     runs-on: ubuntu-latest
 
     steps:
