@@ -7,7 +7,7 @@ module ShotgridApiRuby
 
     sig { params(connection: Faraday::Connection).void }
     def initialize(connection)
-      @connection = T.let(connection.dup, Faraday::Connection)
+      @connection = T.let(connection.clone, Faraday::Connection)
       @connection.url_prefix = "#{@connection.url_prefix}/preferences"
     end
 

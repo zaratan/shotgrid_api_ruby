@@ -7,6 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.1.0] - 2026-05-11
+
+### Changed
+
+- Bumped `faraday` constraint from `~> 1` to `~> 2.0`
+- Replaced `connection.dup` with `connection.clone` in `Preferences`, `Entities`, `Schema`, `Summarize`: Faraday 2's `RackBuilder#dup` drops singleton extensions, breaking VCR's hook injection in consumer test suites. `clone` shares the builder (preserving extensions) while keeping `url_prefix` mutations isolated on the `Connection` itself.
+
+### Added
+
+- `faraday-net_http ~> 3.0` runtime dependency: Faraday 2 ships the adapters as separate gems, so `Faraday.default_adapter` (`:net_http`) is now loaded explicitly via `require 'faraday/net_http'`
+
+### Removed
+
+- Implicit transitive Faraday adapter/middleware gems pulled by the Faraday 1.x metagem and never used in code: `faraday-em_http`, `faraday-em_synchrony`, `faraday-excon`, `faraday-httpclient`, `faraday-multipart`, `faraday-net_http_persistent`, `faraday-patron`, `faraday-rack`, `faraday-retry`, `multipart-post`, `ruby2_keywords`
+
 ## [0.2.0.9] - 2026-05-11
 
 ### Changed

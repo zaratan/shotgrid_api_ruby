@@ -6,6 +6,7 @@ require 'zeitwerk'
 require 'dry/inflector'
 require 'ostruct'
 require 'faraday'
+require 'faraday/net_http'
 require 'sorbet-runtime'
 require 'json'
 

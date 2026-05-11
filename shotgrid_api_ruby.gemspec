@@ -36,7 +36,8 @@ Gem::Specification.new do |spec|
   spec.require_paths = ['lib']
 
   spec.add_dependency 'dry-inflector', '~> 1.0'
-  spec.add_dependency 'faraday', '~> 1'
+  spec.add_dependency 'faraday', '~> 2.0'
+  spec.add_dependency 'faraday-net_http', '~> 3.0'
   spec.add_dependency 'ostruct'
   spec.add_dependency 'sorbet-runtime'
   spec.add_dependency 'zeitwerk', '~> 2.2'
