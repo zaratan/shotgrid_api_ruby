@@ -1,1 +1,0 @@
-yarn prettier -c './!(vendor|sorbet|node_modules)/**/*.rb' Guardfile Rakefile *.gemspec Gemfile

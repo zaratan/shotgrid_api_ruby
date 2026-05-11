@@ -29,8 +29,9 @@ module ShotgridApiRuby
       attr_reader :connection
 
       sig do
-        params(filter: T.untyped, logical_operator: T.untyped)
-          .returns(T.untyped)
+        params(filter: T.untyped, logical_operator: T.untyped).returns(
+          T.untyped,
+        )
       end
       def count(filter: nil, logical_operator: 'and')
         result =
@@ -44,13 +45,12 @@ module ShotgridApiRuby
 
       sig do
         params(
-            filter: Params::FiltersFiledType,
-            grouping: Params::GroupingFieldType,
-            summary_fields: Params::SummaryFiledsType,
-            logical_operator: Params::LogicalOperatorType,
-            include_archived_projects: T.nilable(T::Boolean),
-          )
-          .returns(Summary)
+          filter: Params::FiltersFiledType,
+          grouping: Params::GroupingFieldType,
+          summary_fields: Params::SummaryFiledsType,
+          logical_operator: Params::LogicalOperatorType,
+          include_archived_projects: T.nilable(T::Boolean),
+        ).returns(Summary)
       end
       def summarize(
         filter: nil,
@@ -72,12 +72,11 @@ module ShotgridApiRuby
 
         resp =
           @connection.post('', params) do |req|
-            req.headers['Content-Type'] =
-              if params[:filters].is_a? Array
-                'application/vnd+shotgun.api3_array+json'
-              else
-                'application/vnd+shotgun.api3_hash+json'
-              end
+            req.headers['Content-Type'] = if params[:filters].is_a? Array
+              'application/vnd+shotgun.api3_array+json'
+            else
+              'application/vnd+shotgun.api3_hash+json'
+            end
             req.body = params.to_h.to_json
           end
         resp_body = JSON.parse(resp.body)

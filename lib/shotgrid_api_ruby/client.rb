@@ -82,11 +82,10 @@ module ShotgridApiRuby
 
     sig do
       params(
-          name: T.any(String, Symbol),
-          args: T::Array[T.untyped],
-          block: T.nilable(Proc),
-        )
-        .returns(Entities)
+        name: T.any(String, Symbol),
+        args: T::Array[T.untyped],
+        block: T.nilable(Proc),
+      ).returns(Entities)
     end
     def method_missing(name, *args, &block)
       if args.empty?

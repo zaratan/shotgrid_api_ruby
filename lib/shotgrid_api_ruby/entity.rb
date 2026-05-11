@@ -14,8 +14,11 @@ module ShotgridApiRuby
     const :links, T::Hash[String, String]
 
     sig do
-      params(name: T.any(String, Symbol), args: T.untyped, block: T.untyped)
-        .returns(T.untyped)
+      params(
+        name: T.any(String, Symbol),
+        args: T.untyped,
+        block: T.untyped,
+      ).returns(T.untyped)
     end
     def method_missing(name, *args, &block)
       if attributes.respond_to?(name)
@@ -27,8 +30,9 @@ module ShotgridApiRuby
     end
 
     sig do
-      params(name: T.any(String, Symbol), _private_methods: T.untyped)
-        .returns(T::Boolean)
+      params(name: T.any(String, Symbol), _private_methods: T.untyped).returns(
+        T::Boolean,
+      )
     end
     def respond_to_missing?(name, _private_methods = false)
       attributes.respond_to?(name) || super

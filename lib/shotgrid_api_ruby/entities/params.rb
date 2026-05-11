@@ -32,24 +32,24 @@ module ShotgridApiRuby
       def add_sort(sort)
         return unless sort
 
-        @parsed_params[:sort] =
-          if sort.is_a?(Hash)
-            sort
-              .map do |field, direction|
-                "#{direction.to_s.start_with?('desc') ? '-' : ''}#{field}"
-              end
-              .join(',')
-          else
-            [sort].flatten.join(',')
-          end
+        @parsed_params[:sort] = if sort.is_a?(Hash)
+          sort
+            .map do |field, direction|
+              "#{direction.to_s.start_with?('desc') ? '-' : ''}#{field}"
+            end
+            .join(',')
+        else
+          [sort].flatten.join(',')
+        end
       end
 
       PageType = T.type_alias { T.nilable(T.any(String, Integer)) }
       PageSizeType = T.type_alias { T.nilable(T.any(String, Integer)) }
 
       sig do
-        params(page: PageType, page_size: PageSizeType)
-          .returns(T.nilable(T::Hash[T.untyped, T.untyped]))
+        params(page: PageType, page_size: PageSizeType).returns(
+          T.nilable(T::Hash[T.untyped, T.untyped]),
+        )
       end
       def add_page(page, page_size)
         return unless page || page_size
@@ -67,20 +67,24 @@ module ShotgridApiRuby
         end
       sig { params(fields: FieldsType).returns(String) }
       def add_fields(fields)
-        @parsed_params[:fields] =
-          fields && !fields.empty? ? [fields].flatten.join(',') : '*'
+        @parsed_params[:fields] = (
+          if fields && !fields.empty?
+            [fields].flatten.join(',')
+          else
+            '*'
+          end
+        )
       end
 
       sig do
         params(
-            return_only: T.nilable(T::Boolean),
-            include_archived_projects: T.nilable(T::Boolean),
-          )
-          .returns(
-            T.nilable(
-              { return_only: String, include_archived_projects: T::Boolean },
-            ),
-          )
+          return_only: T.nilable(T::Boolean),
+          include_archived_projects: T.nilable(T::Boolean),
+        ).returns(
+          T.nilable(
+            { return_only: String, include_archived_projects: T::Boolean },
+          ),
+        )
       end
       def add_options(return_only, include_archived_projects)
         return if return_only.nil? && include_archived_projects.nil?
@@ -133,82 +137,83 @@ module ShotgridApiRuby
           )
         end
       sig do
-        params(filters: FiltersFiledType, logical_operator: LogicalOperatorType)
-          .returns(
-            T.nilable(
-              T.any(
-                T::Hash[String, String],
-                {
-                  conditions:
-                    T.any(
-                      T::Array[T.any(String, Symbol, Integer, Float)],
-                      T::Array[T.untyped],
-                    ),
-                  logical_operator: String,
-                },
-              ),
+        params(
+          filters: FiltersFiledType,
+          logical_operator: LogicalOperatorType,
+        ).returns(
+          T.nilable(
+            T.any(
+              T::Hash[String, String],
+              {
+                conditions:
+                  T.any(
+                    T::Array[T.any(String, Symbol, Integer, Float)],
+                    T::Array[T.untyped],
+                  ),
+                logical_operator: String,
+              },
             ),
-          )
+          ),
+        )
       end
       def add_filter(filters, logical_operator = 'and')
         return unless filters
 
         # cast are here because Sorbet is confused by the madness filters can be
-        @parsed_params[:filter] =
-          if (self.class.filters_are_simple?(filters))
-            translate_simple_filters_to_sg(
-              T.cast(
-                filters,
-                T::Hash[
-                  T.any(String, Symbol),
-                  T.any(
-                    String,
-                    Symbol,
-                    Integer,
-                    Float,
-                    T::Array[T.any(String, Symbol, Integer, Float)],
-                  )
-                ],
-              ),
+        @parsed_params[:filter] = if (self.class.filters_are_simple?(filters))
+          translate_simple_filters_to_sg(
+            T.cast(
+              filters,
+              T::Hash[
+                T.any(String, Symbol),
+                T.any(
+                  String,
+                  Symbol,
+                  Integer,
+                  Float,
+                  T::Array[T.any(String, Symbol, Integer, Float)],
+                )
+              ],
+            ),
+          )
+        elsif filters.is_a? Hash
+          filters =
+            T.cast(
+              T.unsafe(filters),
+              T::Hash[
+                T.any(String, Symbol),
+                T.any(
+                  String,
+                  Symbol,
+                  Integer,
+                  Float,
+                  T::Array[T.any(String, Symbol, Integer, Float)],
+                  T::Hash[
+                    T.any(String, Symbol),
+                    T.any(
+                      String,
+                      Symbol,
+                      Integer,
+                      Float,
+                      T::Array[T.any(String, Symbol, Integer, Float)],
+                      T.untyped,
+                    )
+                  ],
+                  T.untyped,
+                )
+              ],
             )
-          elsif filters.is_a? Hash
-            filters =
-              T.cast(
-                T.unsafe(filters),
-                T::Hash[
-                  T.any(String, Symbol),
-                  T.any(
-                    String,
-                    Symbol,
-                    Integer,
-                    Float,
-                    T::Array[T.any(String, Symbol, Integer, Float)],
-                    T::Hash[
-                      T.any(String, Symbol),
-                      T.any(
-                        String,
-                        Symbol,
-                        Integer,
-                        Float,
-                        T::Array[T.any(String, Symbol, Integer, Float)],
-                        T.untyped,
-                      )
-                    ],
-                    T.untyped,
-                  )
-                ],
-              )
-            {
-              conditions:
-                filters[:conditions] || filters['conditions'] ||
-                  translate_complex_filters_to_sg(filters),
-              logical_operator:
-                filters[:logical_operator] || filters['logical_operator'] ||
-                  logical_operator.to_s,
-            }
-          else
-            { conditions: filters, logical_operator: logical_operator.to_s }
-          end
+          {
+            conditions:
+              filters[:conditions] || filters['conditions'] ||
+                translate_complex_filters_to_sg(filters),
+            logical_operator:
+              filters[:logical_operator] || filters['logical_operator'] ||
+                logical_operator.to_s,
+          }
+        else
+          { conditions: filters, logical_operator: logical_operator.to_s }
+        end
       end
 
       GroupingFieldType =
@@ -243,24 +248,25 @@ module ShotgridApiRuby
           return
         end
 
-        @parsed_params[:grouping] =
-          grouping.each_with_object([]) do |(key, options), result|
-            if options.is_a? Hash
-              result << {
-                field: key.to_s,
-                type: options[:type]&.to_s || options['type']&.to_s || 'exact',
-                direction:
-                  options[:direction]&.to_s || options['direction']&.to_s ||
-                    'asc',
-              }
-            else
-              result << {
-                field: key.to_s,
-                type: 'exact',
-                direction: options.to_s,
-              }
-            end
+        @parsed_params[:grouping] = grouping.each_with_object(
+          [],
+        ) do |(key, options), result|
+          if options.is_a? Hash
+            result << {
+              field: key.to_s,
+              type: options[:type]&.to_s || options['type']&.to_s || 'exact',
+              direction:
+                options[:direction]&.to_s || options['direction']&.to_s ||
+                  'asc',
+            }
+          else
+            result << {
+              field: key.to_s,
+              type: 'exact',
+              direction: options.to_s,
+            }
           end
+        end
       end
 
       SummaryFiledsType =
@@ -278,8 +284,9 @@ module ShotgridApiRuby
           )
         end
       sig do
-        params(summary_fields: SummaryFiledsType)
-          .returns(T.nilable(T::Array[T::Hash[T.untyped, T.untyped]]))
+        params(summary_fields: SummaryFiledsType).returns(
+          T.nilable(T::Array[T::Hash[T.untyped, T.untyped]]),
+        )
       end
       def add_summary_fields(summary_fields)
         return unless summary_fields
@@ -290,8 +297,9 @@ module ShotgridApiRuby
         end
 
         if summary_fields.is_a? Hash
-          @parsed_params[:summary_fields] =
-            summary_fields.map { |k, v| { field: k.to_s, type: v.to_s } }
+          @parsed_params[:summary_fields] = summary_fields.map do |k, v|
+            { field: k.to_s, type: v.to_s }
+          end
         end
       end
 
@@ -320,7 +328,35 @@ module ShotgridApiRuby
 
       sig do
         params(
-            filters:
+          filters:
+            T::Hash[
+              T.any(String, Symbol),
+              T.any(
+                String,
+                Symbol,
+                Integer,
+                Float,
+                T::Array[T.any(String, Symbol, Integer, Float)],
+              )
+            ],
+        ).returns(T::Hash[String, String])
+      end
+      def translate_simple_filters_to_sg(filters)
+        filters
+          .map do |field, value|
+            [
+              field.to_s,
+              value.is_a?(Array) ? value.map(&:to_s).join(',') : value.to_s,
+            ]
+          end
+          .to_h
+      end
+
+      sig do
+        params(
+          filters:
+            T.any(
+              T::Array[T.untyped],
               T::Hash[
                 T.any(String, Symbol),
                 T.any(
@@ -329,57 +365,29 @@ module ShotgridApiRuby
                   Integer,
                   Float,
                   T::Array[T.any(String, Symbol, Integer, Float)],
+                  T::Hash[
+                    T.any(String, Symbol),
+                    T.any(
+                      String,
+                      Symbol,
+                      Integer,
+                      Float,
+                      T::Array[T.any(String, Symbol, Integer, Float)],
+                      T.untyped,
+                    )
+                  ],
+                  T.untyped,
                 )
               ],
-          )
-          .returns(T::Hash[String, String])
-      end
-      def translate_simple_filters_to_sg(filters)
-        filters.map do |field, value|
-          [
-            field.to_s,
-            value.is_a?(Array) ? value.map(&:to_s).join(',') : value.to_s,
-          ]
-        end.to_h
-      end
-
-      sig do
-        params(
-            filters:
-              T.any(
-                T::Array[T.untyped],
-                T::Hash[
-                  T.any(String, Symbol),
-                  T.any(
-                    String,
-                    Symbol,
-                    Integer,
-                    Float,
-                    T::Array[T.any(String, Symbol, Integer, Float)],
-                    T::Hash[
-                      T.any(String, Symbol),
-                      T.any(
-                        String,
-                        Symbol,
-                        Integer,
-                        Float,
-                        T::Array[T.any(String, Symbol, Integer, Float)],
-                        T.untyped,
-                      )
-                    ],
-                    T.untyped,
-                  )
-                ],
-              ),
-          )
-          .returns(
-            T::Array[
-              T.any(
-                T::Array[T.any(String, Symbol, Integer, Float)],
-                T::Array[T.untyped],
-              )
-            ],
-          )
+            ),
+        ).returns(
+          T::Array[
+            T.any(
+              T::Array[T.any(String, Symbol, Integer, Float)],
+              T::Array[T.untyped],
+            )
+          ],
+        )
       end
       def translate_complex_filters_to_sg(filters)
         # We don't know how to translate anything but hashes

@@ -25,14 +25,13 @@ module ShotgridApiRuby
 
     sig do
       params(
-          fields: Params::FieldsType,
-          sort: Params::SortType,
-          filter: Params::FiltersFiledType,
-          retired: T.nilable(T::Boolean),
-          include_archived_projects: T.nilable(T::Boolean),
-          logical_operator: Params::LogicalOperatorType,
-        )
-        .returns(T.nilable(Entity))
+        fields: Params::FieldsType,
+        sort: Params::SortType,
+        filter: Params::FiltersFiledType,
+        retired: T.nilable(T::Boolean),
+        include_archived_projects: T.nilable(T::Boolean),
+        logical_operator: Params::LogicalOperatorType,
+      ).returns(T.nilable(Entity))
     end
     def first(
       fields: nil,
@@ -55,12 +54,11 @@ module ShotgridApiRuby
 
     sig do
       params(
-          id: Integer,
-          fields: Params::FieldsType,
-          retired: T.nilable(T::Boolean),
-          include_archived_projects: T.nilable(T::Boolean),
-        )
-        .returns(ShotgridApiRuby::Entity)
+        id: Integer,
+        fields: Params::FieldsType,
+        retired: T.nilable(T::Boolean),
+        include_archived_projects: T.nilable(T::Boolean),
+      ).returns(ShotgridApiRuby::Entity)
     end
     def find(id, fields: nil, retired: nil, include_archived_projects: nil)
       params = Params.new
@@ -89,8 +87,9 @@ module ShotgridApiRuby
     end
 
     sig do
-      params(attributes: T::Hash[T.any(String, Symbol), T.untyped])
-        .returns(ShotgridApiRuby::Entity)
+      params(attributes: T::Hash[T.any(String, Symbol), T.untyped]).returns(
+        ShotgridApiRuby::Entity,
+      )
     end
     def create(attributes)
       resp =
@@ -121,8 +120,10 @@ module ShotgridApiRuby
     end
 
     sig do
-      params(id: Integer, changes: T::Hash[T.any(String, Symbol), T.untyped])
-        .returns(ShotgridApiRuby::Entity)
+      params(
+        id: Integer,
+        changes: T::Hash[T.any(String, Symbol), T.untyped],
+      ).returns(ShotgridApiRuby::Entity)
     end
     def update(id, changes)
       return find(id) if changes.empty?
@@ -191,16 +192,15 @@ module ShotgridApiRuby
 
     sig do
       params(
-          fields: Params::FieldsType,
-          logical_operator: Params::LogicalOperatorType,
-          sort: Params::SortType,
-          filter: Params::FiltersFiledType,
-          page: Params::PageType,
-          page_size: Params::PageSizeType,
-          retired: T.nilable(T::Boolean),
-          include_archived_projects: T.nilable(T::Boolean),
-        )
-        .returns(T::Array[Entity])
+        fields: Params::FieldsType,
+        logical_operator: Params::LogicalOperatorType,
+        sort: Params::SortType,
+        filter: Params::FiltersFiledType,
+        page: Params::PageType,
+        page_size: Params::PageSizeType,
+        retired: T.nilable(T::Boolean),
+        include_archived_projects: T.nilable(T::Boolean),
+      ).returns(T::Array[Entity])
     end
     def all(
       fields: nil,
@@ -258,16 +258,15 @@ module ShotgridApiRuby
 
     sig do
       params(
-          fields: Params::FieldsType,
-          logical_operator: Params::LogicalOperatorType,
-          sort: Params::SortType,
-          filter: Params::FiltersFiledType,
-          page: Params::PageType,
-          page_size: Params::PageSizeType,
-          retired: T.nilable(T::Boolean),
-          include_archived_projects: T.nilable(T::Boolean),
-        )
-        .returns(T::Array[Entity])
+        fields: Params::FieldsType,
+        logical_operator: Params::LogicalOperatorType,
+        sort: Params::SortType,
+        filter: Params::FiltersFiledType,
+        page: Params::PageType,
+        page_size: Params::PageSizeType,
+        retired: T.nilable(T::Boolean),
+        include_archived_projects: T.nilable(T::Boolean),
+      ).returns(T::Array[Entity])
     end
     def search(
       fields: nil,
@@ -307,12 +306,11 @@ module ShotgridApiRuby
 
       resp =
         @connection.post('_search', params) do |req|
-          req.headers['Content-Type'] =
-            if params[:filters].is_a? Array
-              'application/vnd+shotgun.api3_array+json'
-            else
-              'application/vnd+shotgun.api3_hash+json'
-            end
+          req.headers['Content-Type'] = if params[:filters].is_a? Array
+            'application/vnd+shotgun.api3_array+json'
+          else
+            'application/vnd+shotgun.api3_hash+json'
+          end
           req.body = params.to_h.to_json
         end
       resp_body = JSON.parse(resp.body)
@@ -357,10 +355,9 @@ module ShotgridApiRuby
 
     sig do
       params(
-          filter: Params::FiltersFiledType,
-          logical_operator: Params::LogicalOperatorType,
-        )
-        .returns(T.untyped)
+        filter: Params::FiltersFiledType,
+        logical_operator: Params::LogicalOperatorType,
+      ).returns(T.untyped)
     end
     def count(filter: nil, logical_operator: 'and')
       summary_client.count(filter: filter, logical_operator: logical_operator)
@@ -368,13 +365,12 @@ module ShotgridApiRuby
 
     sig do
       params(
-          filter: Params::FiltersFiledType,
-          grouping: Params::GroupingFieldType,
-          summary_fields: Params::SummaryFiledsType,
-          logical_operator: Params::LogicalOperatorType,
-          include_archived_projects: T.nilable(T::Boolean),
-        )
-        .returns(Summarize::Summary)
+        filter: Params::FiltersFiledType,
+        grouping: Params::GroupingFieldType,
+        summary_fields: Params::SummaryFiledsType,
+        logical_operator: Params::LogicalOperatorType,
+        include_archived_projects: T.nilable(T::Boolean),
+      ).returns(Summarize::Summary)
     end
     def summarize(
       filter: nil,
