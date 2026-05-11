@@ -9,7 +9,7 @@ module ShotgridApiRuby
       params(connection: Faraday::Connection, type: T.any(String, Symbol)).void
     end
     def initialize(connection, type)
-      @connection = T.let(connection.dup, Faraday::Connection)
+      @connection = T.let(connection.clone, Faraday::Connection)
       @type = T.let(type.to_s, String)
       @base_url_prefix = T.let(@connection.url_prefix, URI)
       @connection.url_prefix = "#{@connection.url_prefix}/entity/#{type}"

@@ -17,7 +17,7 @@ module ShotgridApiRuby
         ).void
       end
       def initialize(connection, type, base_url_prefix)
-        @connection = T.let(connection.dup, Faraday::Connection)
+        @connection = T.let(connection.clone, Faraday::Connection)
         @type = T.let(type, T.any(String, Symbol))
         @connection.url_prefix =
           T.let("#{base_url_prefix}/entity/#{type}/_summarize", String)
